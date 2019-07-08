@@ -1,14 +1,8 @@
 package xGen;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,11 +10,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import jWriter.JSONWriter;
-
 public class XPathGenerator {
 
-	static WebDriver wd = new ChromeDriver();
+	public static WebDriver wd = new ChromeDriver();
 
 	public static void waitForPageLoaded(WebDriver webDriver) {
 		ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
@@ -55,7 +47,7 @@ public class XPathGenerator {
 				+ "\\_|    \\___/\\_|  |_/  \\____/\\_| \\_\\____/\\_| |_/\\_/  \\___/\\_| \\_|\r\n"
 				+ "                                                                ");
 
-		Instant start = Instant.now();
+	//	Instant start = Instant.now();
 
 		wd.manage().window().maximize();
 
@@ -65,6 +57,16 @@ public class XPathGenerator {
 
 		waitForPageLoaded(wd);
 
+		RootPageDOM.rootPageXpathMAp(URL,wd);
+		
+	
+		try {
+			Thread.sleep(50000);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+		
+		/*
 		Iterator<String> it = nav.iterator();
 
 		if (it.hasNext()) {
@@ -80,7 +82,7 @@ public class XPathGenerator {
 
 		waitForPageLoaded(wd);
 
-		System.out.println("\nPage Loaded... Generating XPath for "+wd.getCurrentUrl());
+		System.out.println("\nPage Loaded... Generating XPath for " + wd.getCurrentUrl());
 
 		List<WebElement> eList = wd.findElements(By.cssSelector("*"));
 
@@ -107,22 +109,22 @@ public class XPathGenerator {
 							|| (l != null && !l.equals(""))) {
 						String x = generateXpath(e);
 
-						
 						if (e.getAttribute("type").equalsIgnoreCase("checkbox")) {
 							x = x.split("tbody\\[1\\]")[1].split("\\/div\\[1\\]")[0].replaceAll("/", "//");
 						}
-						if(e.getTagName().equalsIgnoreCase("input")&&e.getAttribute("type")!=null&&e.getAttribute("type").equalsIgnoreCase("submit"))
-						{
+						if (e.getTagName().equalsIgnoreCase("input") && e.getAttribute("type") != null
+								&& e.getAttribute("type").equalsIgnoreCase("submit")) {
 							if (xMap.containsKey("button"))
 								xMap.get("button").put(
-										((id != null && !id.equals("")) ? id : (n != null && !n.equals("")) ? n : l), x);
+										((id != null && !id.equals("")) ? id : (n != null && !n.equals("")) ? n : l),
+										x);
 							else {
 								xMap.put("button", new LinkedHashMap<String, String>());
 								xMap.get("button").put(
-										((id != null && !id.equals("")) ? id : (n != null && !n.equals("")) ? n : l), x);
+										((id != null && !id.equals("")) ? id : (n != null && !n.equals("")) ? n : l),
+										x);
 							}
-						}
-						else if (xMap.containsKey(e.getTagName()))
+						} else if (xMap.containsKey(e.getTagName()))
 							xMap.get(e.getTagName()).put(
 									((id != null && !id.equals("")) ? id : (n != null && !n.equals("")) ? n : l), x);
 						else {
@@ -136,7 +138,6 @@ public class XPathGenerator {
 			}
 		}
 
-//		xMap.forEach((k, v) -> System.out.println(k + "     " + v));
 		// Map not allowing duplicate values as keys so skipping tags
 
 		Instant finish = Instant.now();
@@ -144,11 +145,11 @@ public class XPathGenerator {
 		long timeElapsed = Duration.between(start, finish).getSeconds(); // in millis
 
 		String cURL = "locators";
-		
+
 		String wdcURL = wd.getCurrentUrl();
-		
-		if(wdcURL.length() - wdcURL.replaceAll("/","").length()>=3)
-			 cURL = wdcURL.split("/")[3];
+
+		if (wdcURL.length() - wdcURL.replaceAll("/", "").length() >= 3)
+			cURL = wdcURL.split("/")[3];
 
 		System.out.println("\nTotal XPath generated : " + xMap.values().stream().mapToInt(LinkedHashMap::size).sum()
 				+ " in " + timeElapsed + " seconds.\n ");
@@ -156,17 +157,14 @@ public class XPathGenerator {
 		wd.close();
 
 		JSONWriter.writer(xMap, cURL); // Writing to JSON file
-		
-		
-		
 
+		*/
 	}
 
 	@SuppressWarnings("unchecked")
 	public static String generateXpath(WebElement e) {
 
-		if (e.getAttribute("id") != null && !e.getAttribute("id").equals("")
-				&& !e.getAttribute("id").contains("Checkbox"))
+		if (e.getAttribute("id") != null && !e.getAttribute("id").equals("") && !e.getAttribute("id").contains("Checkbox"))
 			return "//" + e.getTagName() + "[@id='" + e.getAttribute("id") + "']";
 		if (e.getTagName().equals("html"))
 			return "/html[1]";
@@ -200,17 +198,8 @@ public class XPathGenerator {
 		return null;
 
 	}
-}
+	
+	
+	
 
-/*
- * 
- * This piece of code will print the entire DOM to console
- * 
- * String javascript = "return arguments[0].innerHTML"; String
- * pageSource=(String)((JavascriptExecutor)wd) .executeScript(javascript,
- * wd.findElement(By.tagName("html"))); pageSource = "<html>"+pageSource
- * +"</html>"; System.out.println(pageSource);
- * 
- * 
- * 
- */
+}

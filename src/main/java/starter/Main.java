@@ -1,3 +1,6 @@
+package starter;
+
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -46,8 +49,19 @@ public class Main {
 
 		XPathGenerator.generate(URL, nav); // will be later seeded with URL
 		
-		
+	
 
 	}
+	
+	
+	
+	public static void programSleep(long time) {
+		try {
+			Thread.sleep(time);
+		}catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 }
